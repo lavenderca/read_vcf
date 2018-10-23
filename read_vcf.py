@@ -435,8 +435,8 @@ def read_vcf(input_fn, output_fn, gene_list_fn=None):
                 ) = line.strip().split('\t')[:9]
                 sample_info = line.strip().split('\t')[9:]
 
-                #  QD not reported in all GATK lines
-                #  This is done when AD for all samples is 0
+                # QD not reported in all GATK lines
+                # This is done when AD for all samples is 0
                 try:
                     qd = _info.split('QD=')[1].split(';')[0]
                 except:
@@ -456,8 +456,8 @@ def read_vcf(input_fn, output_fn, gene_list_fn=None):
                         ('Position Info', field): value,
                     })
 
-                #  Annotation fields, snpEff
-                #  Retrieve ANN fields
+                # Annotation fields, snpEff
+                # Retrieve ANN fields
                 _ann = _info.split('ANN=')[1].split(';')[0].split(',')
                 _additional_reports = len(_ann) > 1
 
@@ -521,7 +521,7 @@ def read_vcf(input_fn, output_fn, gene_list_fn=None):
                     ('Annotation', 'Additional Reports?'): _additional_reports,
                 })
 
-                #  Genotypes
+                # Genotypes
                 genotypes = []
                 for i, sample in enumerate(samples):
                     genotype = get_genotype(sample_info[i], _format, _ref, _alt)
@@ -531,7 +531,7 @@ def read_vcf(input_fn, output_fn, gene_list_fn=None):
                     })
                     genotypes.append(genotype)
 
-                #  Allele frequency
+                # Allele frequency
                 (
                     call_rate,
                     allele_num,
@@ -570,23 +570,23 @@ def read_vcf(input_fn, output_fn, gene_list_fn=None):
                         ('Allele Frequency', field): value,
                     })
 
-                #  Read depths
+                # Read depths
                 for i, sample in enumerate(samples):
                     read_depth = get_read_depth(sample_info[i], _format)
                     output_dict.update({
                         ('Read Depths', sample): read_depth,
                     })
 
-                #  dbNSFP impact
+                # dbNSFP impact
                 update_output_dict(output_dict, _info, DBNSFP_IMPACT_INFO_DICT, 'Impact')
 
-                #  ExAc frequencies
+                # ExAc frequencies
                 update_output_dict(output_dict, _info, EXAC_FREQUENCY_INFO_DICT, 'ExAc Frequency')
 
-                #  FILTERS
+                # FILTERS
                 _filter = False
 
-                #  Gene set filter
+                # Gene set filter
                 if gene_list_fn:
                     gene_name = output_dict[('Annotation', 'Gene Name')]
                     distance = output_dict[('Annotation', 'Distance to Feature')]
